@@ -1,0 +1,14 @@
+john doe
+Password
+jane doe
+P@ssword
+eric idle
+P@ssWord
+john cleese
+P@ssW0rd
+polly parrot
+Password
+john smith
+password
+anthony
+anthony1
