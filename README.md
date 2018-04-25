@@ -1,5 +1,6 @@
 # Secure-Number-Game
 A number guessing game requiring a username and password built in Python <br>
+
 There are two files:<br>
 number game is a basic python program that plays a nummber guessing game<br>
 
