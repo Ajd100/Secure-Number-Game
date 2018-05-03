@@ -23,7 +23,7 @@ def main():
 	   Command Line and sends them to check user"""
 
 	#Grabbing options from the Command Line
-	parser = optparse.OptionParser('use these two flags to login: -u' + ' <username> -p <password>')
+	parser = optparse.OptionParser('use these two flags to login, if there is a space, \nsurround them in quotes i.e "Anthony Decker": -u' + ' <username> -p <password>')
 	parser.add_option('-u', dest='usrInfo', type='string', help='specify the username')
 	parser.add_option('-p', dest='usrPass', type='string', help='specify the password')
 
@@ -102,6 +102,7 @@ def checkUser(username, password):
 								break
 							#If they'd like to try again, moves to tryUserAgain()
 							elif(usr_choice.lower() == 'again'):
+								logger.debug("Sending the file over to trying again %s " %pFile)
 								tryUserAgain(pFile)
 								break
 							elif(usr_choice.lower() == 'no'):
@@ -122,6 +123,7 @@ def checkUser(username, password):
 
 	#If both things are true, play the game - sending username to play()
 	if (checkUserName == True and checkPass == True):
+		logger.debug("Sending the username back to the play method: %s" %username)
 		play(username)
 
 def tryUserAgain(pFile):
@@ -164,7 +166,10 @@ def createUser():
 		while c:
 			with open("user_list.txt", "r+") as addFile:
 				#Asking for the new username
-				newUser = str(input("Please enter a new username: "))
+				newUser = str(input("Please enter a new username, type quit if you don't want quit: "))
+				if (newUser.lower() == 'quit'):
+					print("\nI'm sad to see you go, but thanks for playing!")
+					quit()
 				print("Checking if you can use this username... ")
 				pFile = addFile.read().strip().split('\n')
 				logger.debug("Making sure we can read and check the list: %s" %pFile) #Debugging
@@ -176,8 +181,11 @@ def createUser():
 						print("Username accepted!")
 						while True:
 							#Asking the user for a new password
-							newPass = str(input("Please enter a new password: "))
+							newPass = str(input("Please enter a new password or type quit to quit: "))
 							newPass = str(newPass.strip(''))
+							if (newPass.lower() == 'quit'):
+								print("\nI'm sad to see you go, but thanks for playing!")
+								quit()
 							#Asking for a verification of the password
 							confirmPass = str(input("Please enter your password again to confirm: "))
 							if (confirmPass == newPass):
@@ -214,7 +222,7 @@ def createUser():
 def tryAgain(username, i, pFile, usernameIndex):
 	"""This is the method that allows the user to try entering a password
 	   again, if it is incorrect too many times, it will kill the game"""
-	logger.debug("Printing all passed variables: %s %d %s %d" % (username, str(i), pFile, str(usernameIndex)))
+	logger.debug("Printing all passed variables: %s %s %s %s" % (username, str(i), pFile, str(usernameIndex)))
 	try:
 		#This loop will ONLY run while the user still has password attemps
 		while (i != 0):
@@ -241,7 +249,7 @@ def play(username):
 		#While loop to make sure the user chooses a correct level value
 		while bad_level:
 			try:
-				usr_select = int(input('Choose a level from 0, 1, 2, or 3! '))
+				usr_select = int(input('Choose a level from 0, 1, 2, or 3!\n(0=beginner, 1=easy, 2=medium, 3=hard)\n'))
 				logger.debug("Checking user input: %d" %usr_select)
 				#These if else statements are the levels, user chooses one of these levels and the random number is generated likewise
 				if(usr_select == 0):
