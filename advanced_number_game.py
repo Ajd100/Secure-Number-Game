@@ -84,7 +84,7 @@ def checkUser(username, password):
 							#If there are too many incorrect passwords, it will kill the game
 							else:
 								print("Too many incorrect passwords, exiting game... ")
-								quit()
+								end_game()
 					else:
 						print("Hmm... There's something wrong with that Username, try a new one - we might as well try a new password too!")
 						username = str(input("Enter a new username: "))
@@ -108,7 +108,7 @@ def checkUser(username, password):
 							elif(usr_choice.lower() == 'no'):
 								#Kills the game because they don't want to create a username
 								print("Since you don't want to cooperate, I'm going to kick you out. BYE! ")
-								quit()
+								end_game()
 								break
 							else:
 								print("I'm only going to accept create, again, or no, choose one of those!")
@@ -152,7 +152,7 @@ def tryUserAgain(pFile):
 			#Quitting the game if the user doesn't want to make a username
 			elif (userChoice.lower() == 'no'):
 				print("Since you don't want to cooperate, I'm going to kick you out. BYE! ")
-				quit()
+				end_game()
 				break
 			else:
 				print("Sorry, I'm picky. I'm only accepting Yes or No")
@@ -169,7 +169,7 @@ def createUser():
 				newUser = str(input("Please enter a new username, type quit if you don't want quit: "))
 				if (newUser.lower() == 'quit'):
 					print("\nI'm sad to see you go, but thanks for playing!")
-					quit()
+					end_game()
 				print("Checking if you can use this username... ")
 				pFile = addFile.read().strip().split('\n')
 				logger.debug("Making sure we can read and check the list: %s" %pFile) #Debugging
@@ -185,7 +185,7 @@ def createUser():
 							newPass = str(newPass.strip(''))
 							if (newPass.lower() == 'quit'):
 								print("\nI'm sad to see you go, but thanks for playing!")
-								quit()
+								end_game()
 							#Asking for a verification of the password
 							confirmPass = str(input("Please enter your password again to confirm: "))
 							if (confirmPass == newPass):
@@ -249,7 +249,7 @@ def play(username):
 		#While loop to make sure the user chooses a correct level value
 		while bad_level:
 			try:
-				usr_select = int(input('Choose a level from 0, 1, 2, or 3!\n(0=beginner, 1=easy, 2=medium, 3=hard)\n'))
+				usr_select = int(input('Choose a level from 0, 1, 2, or 3!\n(0=beginner, 1=easy, 2=medium, 3=hard, 4=impossible)\n'))
 				logger.debug("Checking user input: %d" %usr_select)
 				#These if else statements are the levels, user chooses one of these levels and the random number is generated likewise
 				if(usr_select == 0):
@@ -270,6 +270,10 @@ def play(username):
 				elif(usr_select == 3):
 					rnum = random.randint(1,100)
 					print("The random number is between 1 and 100\nUse an integer between 1 and 100")
+					bad_level = False
+				elif(usr_select == 4):
+					rnum = random.randint(1,1000)
+					print("The random number is between 1 and 1000\nUse an integer between 1 and 1000")
 					bad_level = False
 
 				else:
@@ -309,7 +313,7 @@ def play(username):
 	except KeyboardInterrupt:
 		logger.warning("User has used Control^c to end the game")
 		print("\nI'm sad to see you go, but thanks for playing!")
-		quit()
+		end_game()
 
 def num_check(usrNum, ranNum):
 	"""This function checks the user's input against the
@@ -333,7 +337,10 @@ def num_check(usrNum, ranNum):
 	except KeyboardInterrupt:
 		logger.warning("User has used Control^c to end the game")
 		print("I'm sad to see you go, but thanks for playing!")
-
+def end_game():
+	"""This ends the game and exits in the terminal"""
+	print("Thank you for playing")
+	exit()
 def play_again(username):
 	"""This function asks if the user would like to play again and catches
 	   bad input for the very specific requirements to leave the game."""
@@ -352,7 +359,7 @@ def play_again(username):
 			elif(usr_input.title() == 'Quit'):
 				print('Goodybye! Thanks for playing!')
 				logger.debug("user does not want to play again, argument passed: %s" %usr_input)
-				quit()
+				end_game()
 
 			else:
 				print("Invalid input, please use either 'yes' or 'quit'")
